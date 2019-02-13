@@ -6,10 +6,10 @@ mainApp.config(function($routeProvider) {
 		templateUrl: 'static/templates/home.html'
 	})
 	.when('/login', {
-		templateUrl: 'static/login.html'
+		templateUrl: 'static/templates/login.html'
 	})
 	.when('/signup', {
-		templateUrl: 'static/signup.html'
+		templateUrl: 'static/templates/signup.html'
 
 	})
 	.otherwise({
