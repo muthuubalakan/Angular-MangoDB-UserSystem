@@ -1,4 +1,6 @@
-from aiohttp import web
+#!/usr/bin/python
+# coding: utf-8
+
 import os
 import addict
 import json
@@ -6,16 +8,24 @@ import sys
 import logging
 import asyncio
 import pymongo
+from aiohttp import web
+from collections import OrderedDict
+from settings import *
+from scripts import Handler
 
 
 log = logging.getLogger()
 
-PATH = os.path.dirname(os.path.realpath(__file__))
+    
+def check_file(filename):
+    if not os.path.isfile(filename):
+        return False
+    return open(filename).read()
 
-STATIC = PATH + "/static"
-INDEX_HTML = "index.html"
-CONFIG_FILE = "assets/conf.json"
-
+async def home(request):
+    if not check_file(INDEX_HTML):
+        return web.Response(text="<h6>Server Error</h6>")
+    return web.Response(text=check_file(INDEX_HTML), content_type="text/html")
 
 async def check_credentials(db, username, password):
     check_user = db.find_one({"username": username})
@@ -26,29 +36,9 @@ async def check_credentials(db, username, password):
         return False
     return True
 
-
-def check_file(filename):
-    if not os.path.isfile(filename):
-        return False
-    f = open(filename).read()
-    return f
-
-
-async def home(request):
-    filename = check_file(INDEX_HTML)
-    return web.Response(text=filename, content_type="text/html")
-
-
-async def sign(request):
-    db = {}
-    form = await request.post()
-    db['first_name'] = form.get("firstname")
-    db['last_name'] = form.get("lastname")
-    db['email'] = form.get("email")
-    db['username'] = form.get("username")
-    db['password'] = form.get("password")
-    users = request.app['db'].insert_one(db)
-    print(db)
+async def sign_up(self, request):
+    handler = Handler(request)
+    status, response = handler.response
     return web.HTTPFound('/')
 
 
@@ -66,7 +56,7 @@ def setup_routes(app):
     app.router.add_route("GET", "/", home)
     app.router.add_route("POST", "/log", login)
     app.router.add_static("/static/", STATIC, name="static")
-    app.router.add_route("POST", "/sign", sign)
+    app.router.add_route("POST", "/sign", sign_up)
 
 
 def init_logging(conf):
@@ -89,10 +79,10 @@ def main(filename):
     app = web.Application()
     conf = load_configuration_file(filename)
     init_logging(conf)
-    client = pymongo.MongoClient(conf.db.uri)
-    db = client[conf.db.db_name]
-    customer_db = db['new_users']
-    app['db'] = customer_db
+    # client = {} #pymongo.MongoClient(conf.db.uri)
+    # db = client[conf.db.db_name]
+    # customer_db = db['new_users']
+    app['db'] = {} #customer_db
     setup_routes(app)
     web.run_app(app, host=conf.common.host, port=conf.common.port)
 
