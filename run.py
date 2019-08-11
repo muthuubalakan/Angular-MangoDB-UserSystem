@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # coding: utf-8
-
 import os
 import addict
 import json
@@ -10,53 +9,45 @@ import asyncio
 import pymongo
 from aiohttp import web
 from collections import OrderedDict
-from settings import *
-from scripts import Handler
+from settings import PATH, STATIC, INDEX_HTML, CONFIG_FILE
+# from scripts import Handler, DatabaseEngine
 
 
 log = logging.getLogger()
 
-    
-def check_file(filename):
-    if not os.path.isfile(filename):
-        return False
-    return open(filename).read()
 
-async def home(request):
-    if not check_file(INDEX_HTML):
-        return web.Response(text="<h6>Server Error</h6>")
-    return web.Response(text=check_file(INDEX_HTML), content_type="text/html")
+class AppView(object):
+    # __request_handler = Handler
 
-async def check_credentials(db, username, password):
-    check_user = db.find_one({"username": username})
-    if not check_user:
-        return False
-    pass_check = check_user["password"]
-    if pass_check != password:
-        return False
-    return True
+    @staticmethod
+    def check_file(filename):
+        if not os.path.isfile(filename):
+            return False
+        return open(filename).read()
 
-async def sign_up(self, request):
-    handler = Handler(request)
-    status, response = handler.response
-    return web.HTTPFound('/')
+    async def home(self, request):
+        if not self.check_file(INDEX_HTML):
+            return web.Response(text="<h6>Server Error</h6>")
+        return web.Response(text=self.check_file(INDEX_HTML), content_type="text/html")
 
+    async def sign_up(self, request):
+        # resp, status = self.__request_handler(request)
+        return web.HTTPFound('/')
 
-async def login(request):
-    form = await request.post()
-    username = form.get("username")
-    password = form.get("password")
-    db = request.app['db']
-    if not check_credentials(db, username, password):
-        return web.Response(text="<h1>Wrong password or username</h1>")   
-    return web.HTTPFound('/')
+    async def login(self, request):
+        form = await request.post()
+        db = request.app['db']
+        if not db.query(form.get):
+            return web.Response(text="<h1>Wrong password or username</h1>")   
+        return web.HTTPFound('/')
 
 
 def setup_routes(app):
-    app.router.add_route("GET", "/", home)
-    app.router.add_route("POST", "/log", login)
+    view = app["view"]
+    app.router.add_route("GET", "/", view.home)
+    app.router.add_route("POST", "/log", view.login)
     app.router.add_static("/static/", STATIC, name="static")
-    app.router.add_route("POST", "/sign", sign_up)
+    app.router.add_route("POST", "/sign", view.sign_up)
 
 
 def init_logging(conf):
@@ -77,18 +68,19 @@ def load_configuration_file(filename):
 
 def main(filename):
     app = web.Application()
+    app["view"] = AppView()
     conf = load_configuration_file(filename)
     init_logging(conf)
-    # client = {} #pymongo.MongoClient(conf.db.uri)
-    # db = client[conf.db.db_name]
-    # customer_db = db['new_users']
-    app['db'] = {} #customer_db
+    app['db'] = {} #DatabaseEngine(uri=conf.db.uri,
+                  #db_name=conf.db.db_name,
+                  #collecton="users")
     setup_routes(app)
     web.run_app(app, host=conf.common.host, port=conf.common.port)
 
 
 if __name__ == '__main__':
     sys.stdout.write("Starting the App....\n")
-    if not check_file(CONFIG_FILE):
-        sys.stderr.write("configuration file is mising\n")
+    assert os.path.isfile(CONFIG_FILE),(
+        'Configuration file required.'
+    )
     main(CONFIG_FILE)
