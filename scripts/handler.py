@@ -1,31 +1,36 @@
 from collections import namedtuple
-from .db_connection import DatabaseEngine
 
 
 class Handler:
-    def __init__(self, request):
+    """
+    Handles incoming request
+
+    :param request: HTTP request object
+    :methods : `create_user(db, form)`
+    """
+    def __init__(self, request=None):
         self.request = request
         self.__response = namedtuple("Response", "status data")
         self.post_data = {}
     
-    async def _request_validation(self):
-        return self.request
+    def check_user(self, db, form):
+        username = form.get("username")
+        password = form.get("password")
+        user = db.find_user(username)
+        if not user:
+            return False
+        pwd = user.get('password', None)
+        if pwd != password:
+            return False
+        return True
     
-    async def insert_post_data(self):
-        assert self.request.method == 'POST', (
-            'Method not allowed.'
-        )
-        form = await self.request.post()
+    def create_user(self, db, form):
         self.post_data['firstname'] = form.get("firstname")
         self.post_data['lastname'] = form.get("lastname")
         self.post_data['email'] = form.get("email")
         self.post_data['username'] = form.get("username")
         self.post_data['password'] = form.get("password")
-        mongo_id = (self.post_data)
+        mongo_id = db.create_user(self.post_data)
         if not mongo_id:
-            raise SystemError
-        return self.__response(201, "created")
-    
-    @property
-    def response(self):
-        return self.__response(200, "OK")
+            return False
+        return True

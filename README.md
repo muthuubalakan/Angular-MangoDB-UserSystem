@@ -8,18 +8,20 @@ Simple aiohttp User-login system using AngularJs routing and MongoDB
 pip3 install -r requirements.txt
 ```
 
-## MongoDB configuration
-The module pymongo is used to configure and connect db.
+## Database
+The application is configured with MongoDB env to store and perform queries in NoSQL.
 
-You can connect to the database server locally or a cloud service. 
+MongoDB configuration is really simple. Provide the MongoDB URI in conf.json file.
+TODO: 
+1. Make ssl connection between server and database. 
+2. Update, delete users.
 
-Edit the conf.json file and add database uri, and database name.
 
-Or you could configure database by following steps,
+If you don't want to connect to mongoDB with URI,  username, password and db server instead,
+you will find following code snippet useful.
 
 ```python3
 import pymongo
-
 
 connection = pymongo.MongoClient(host, port)
 db = connection[db_name]
@@ -30,5 +32,8 @@ customer_db = db[collection_name]
 ## usage
 
 ```
+pip install -r requirements.txt
+
+
 python3 run.py
 ```

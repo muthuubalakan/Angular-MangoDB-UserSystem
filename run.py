@@ -9,37 +9,11 @@ import asyncio
 import pymongo
 from aiohttp import web
 from collections import OrderedDict
-from settings import PATH, STATIC, INDEX_HTML, CONFIG_FILE
-# from scripts import Handler, DatabaseEngine
+from settings import PATH, STATIC, CONFIG_FILE
+from scripts import Handler, DatabaseEngine, AppView
 
 
 log = logging.getLogger()
-
-
-class AppView(object):
-    # __request_handler = Handler
-
-    @staticmethod
-    def check_file(filename):
-        if not os.path.isfile(filename):
-            return False
-        return open(filename).read()
-
-    async def home(self, request):
-        if not self.check_file(INDEX_HTML):
-            return web.Response(text="<h6>Server Error</h6>")
-        return web.Response(text=self.check_file(INDEX_HTML), content_type="text/html")
-
-    async def sign_up(self, request):
-        # resp, status = self.__request_handler(request)
-        return web.HTTPFound('/')
-
-    async def login(self, request):
-        form = await request.post()
-        db = request.app['db']
-        if not db.query(form.get):
-            return web.Response(text="<h1>Wrong password or username</h1>")   
-        return web.HTTPFound('/')
 
 
 def setup_routes(app):
@@ -71,9 +45,9 @@ def main(filename):
     app["view"] = AppView()
     conf = load_configuration_file(filename)
     init_logging(conf)
-    app['db'] = {} #DatabaseEngine(uri=conf.db.uri,
-                  #db_name=conf.db.db_name,
-                  #collecton="users")
+    app['db'] = DatabaseEngine(uri=conf.db.uri,
+                  db_name=conf.db.db_name,
+                  collecton="users")
     setup_routes(app)
     web.run_app(app, host=conf.common.host, port=conf.common.port)
 

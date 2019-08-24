@@ -28,8 +28,8 @@ class DatabaseEngine:
         password = user.get("password", None)
         return user, password
     
-    def insert_doc(self, doc):
+    def create_user(self, doc):
         assert isinstance(doc, dict), (
             f'{type(self).__name__} Error: Expected dict. '
         )
-        return self.connection.insert_one(doc)
+        return self.connection.insert_one(doc).inserted_id
