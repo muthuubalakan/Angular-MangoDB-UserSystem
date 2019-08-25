@@ -12,6 +12,7 @@ pip3 install -r requirements.txt
 The application is configured with MongoDB env to store and perform queries in NoSQL.
 
 MongoDB configuration is really simple. Provide the MongoDB URI in conf.json file.
+
 TODO: 
 1. Make ssl connection between server and database. 
 2. Update, delete users.
@@ -32,8 +33,5 @@ customer_db = db[collection_name]
 ## usage
 
 ```
-pip install -r requirements.txt
-
-
 python3 run.py
 ```
