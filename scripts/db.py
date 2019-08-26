@@ -10,9 +10,9 @@ class DatabaseEngine:
         self.client = self.connect(uri)
         self.db = self.client[db_name]
         self.loop = asyncio.get_event_loop()
-        self.connection = await self.db[collecton]
+        self.connection = self.db[collecton]
     
-    async def connect(self, uri):
+    def connect(self, uri):
         """
         Connnect make the connection to the mongodb with uri which suppose to have credentials.
 
@@ -22,7 +22,7 @@ class DatabaseEngine:
         """
         return pymongo.MongoClient(uri)
     
-    async def query(self, query, **kwargs):
+    def query(self, query, **kwargs):
         user = query.pop("username", None)
         if not user: return None, None
         password = user.get("password", None)
