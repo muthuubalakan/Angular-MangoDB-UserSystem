@@ -47,7 +47,7 @@ db = connection[db_name]
 db.authenticate(username, password)
 customer_db = db[collection_name]
 ```
-Don't write a custon ODM for just user login. Pymongo provides rich tools.
+Don't write a custom ODM for just user login. Pymongo provides rich tools.
 
 
 ## Running locally
