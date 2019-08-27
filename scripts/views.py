@@ -17,29 +17,26 @@ class AppView(Handler):
 
     async def home(self, request):
         if not self.check_file(INDEX_HTML):
-            return web.Response(text="<h6>Server Error</h6>")
+            return web.Response(text="<h6>Server Error</h6>", content_type="text/html")
         return web.Response(text=self.check_file(INDEX_HTML), content_type="text/html")
 
     async def sign_up(self, request):
         cookie = request.get('coin', None)
         if cookie:
             return web.HTTPFound('/')
-        
-        signup_form = await request.post()
+        data = await request.json()
         db = request.app['db']
-        user_created = self.create_user(signup_form, db)
+        user_created = self.create_user(db=db, form=data)
         if not user_created:
-            return web.HTTPBadRequest()
-        return web.HTTPFound('/login')
+            return web.Response(status=401)
+        return web.Response(status=201)
 
     async def login(self, request):
         cookie = request.get('coin', None)
         if cookie:
-            return web.HTTPFound('/')
-        
-        form = await request.post()
+            return web.Response(status=200)
+        data = await request.json()
         db = request.app['db']
-
-        if not self.check_user(db, form):
-            return web.Response(text="<h1>Wrong password or username</h1>")   
-        return web.HTTPFound('/')
+        if not self.check_user(db, data):
+            return web.Response(status=401)
+        return web.Response(status=200)

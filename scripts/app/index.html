@@ -2,49 +2,55 @@
 	<html ng-app="mainApp">
 	<head lang="en">
 		<meta charset="utf-8">
-		<title>User management system</title>
-		<link rel="stylesheet" type="text/css" href="static/style.css">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-	</head>
+		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+			<title>User management system</title>
+			<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular.min.js" type="text/javascript" ></script>
+			<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28//angular-route.min.js" type="text/javascript" ></script>
+			<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
 
-	<body>
+			<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+			<script src="static/app.js" type="text/javascript" ></script>
+			<script src="static/js/controller.js" type="text/javascript"></script>
+			<script src="static/js/services.js" type="text/javascript"></script>
+			<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+			<link href="static/css/style.css" rel="stylesheet" type="text/css" >
+			<link  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		</head>
+		<body>
 			<nav class="navbar navbar-expand-lg navbar-light bg-dark">
-					<div class="collapse navbar-collapse" id="navbarSupportedContent">
-					  <ul class="navbar-nav mr-auto">
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
 						<li class="nav-item active">
-						  <a style="color: blanchedalmond; font-size: 30px;" class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-						</li>
-					  </ul>
-					  <form class="form-inline my-2 my-lg-0">
-						<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-						<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-					  </form>
+							<a style="color: blanchedalmond; font-size: 30px;" class="nav-link" href="#">
+								<i class="material-icons" style="font-size: 20px;">
+									donut_small
+								</i>
+								AioApp</a>
+							</li>
+						</ul>
+						<form class="form-inline my-2 my-lg-0">
+							<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+							<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+						</form>
 					</div>
-				  </nav>
-				<div class="container" style="margin-top: 50px; background: blanchedalmond;">
-					<div class="row justify-content-end">
-
+				</nav>
+				<div class="container" style="margin-top: 50px;">
+					<div class="row justify-content-center">
 						<div class="col-2">
 							<nav class="nav nav-pills">
-								<a class="nav-item nav-link active" href="#/login">Login</a>
-			
-								<a class="nav-item nav-link" href="#/signup">Sign Up</a>
-		
-							  </nav>
+								<a  class="nav-item nav-link" data-toggle="pill" href="#/login">Login</a>
+								<a class="nav-item nav-link" data-toggle="pill" href="#/signup">Sign Up</a>
+							</nav>
 						</div>
 					</div>
+					<div class="row justify-content-center" >
+						<div class="col-lg-8" style="margin-top: 50px;">
+								<ng-view></ng-view>
+						</div>
+
+					</div>
 				</div>
-
-
-		<div>
-			<ng-view></ng-view>
-		</div>
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular.min.js"></script>
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28//angular-route.min.js"></script>
-		<script type="text/javascript" src="static/app.js"></script>
-		<script type="text/javascript" src="static/jq-controller.js"></script>
-	</body>
-	</html>
+			</body>
+			</html>		

@@ -1,16 +1,19 @@
-var mainApp = angular.module("mainApp", ['ngRoute']);
+var aioApp = angular.module("mainApp", [ 'ngRoute' ]);
 
 
-mainApp.config(function($routeProvider) {
+aioApp.config(function($routeProvider) {
 	$routeProvider
 	.when('/', {
-		templateUrl: 'static/templates/home.html'
+		templateUrl: 'static/templates/home.html',
+		controller: 'HomeController',
 	})
 	.when('/login', {
-		templateUrl: 'static/templates/login.html'
+		templateUrl: 'static/templates/login.html',
+		controller: 'LoginController',
 	})
 	.when('/signup', {
-		templateUrl: 'static/templates/signup.html'
+		templateUrl: 'static/templates/signup.html',
+		controller: 'SignupController',
 
 	})
 	.otherwise({

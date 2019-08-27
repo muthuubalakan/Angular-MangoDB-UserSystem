@@ -19,9 +19,9 @@ log = logging.getLogger()
 def setup_routes(app):
     view = app["view"]
     app.router.add_route("GET", "/", view.home)
-    app.router.add_route("POST", "/log", view.login)
+    app.router.add_route("POST", "/login", view.login)
     app.router.add_static("/static/", STATIC, name="static")
-    app.router.add_route("POST", "/sign", view.sign_up)
+    app.router.add_route("POST", "/signup", view.sign_up)
 
 
 def init_logging(conf):
@@ -47,7 +47,7 @@ def main(filename):
     init_logging(conf)
     app['db'] = DatabaseEngine(uri=conf.db.uri,
                   db_name=conf.db.db_name,
-                  collecton="users")
+                  collection="users")
     setup_routes(app)
     web.run_app(app, host=conf.common.host, port=conf.common.port)
 
