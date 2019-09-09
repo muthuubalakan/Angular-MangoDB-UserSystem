@@ -36,10 +36,18 @@ class DatabaseEngine:
     def find_user(self, username, password=None):
         return self.connection.find_one({'username': username}, {'_id':0})
     
+    def delete_user(self, username):
+        try:
+            self.connection.delete_one({'username':username})
+            return True
+        except Exception:
+            return False
+    
+    def update_user(self, oldvalue, newvalue):
+        self.connection.update_one(oldvalue, newvalue)
+    
     def create_user(self, doc):
         assert isinstance(doc, dict), (
             f'{type(self).__name__} Error: Expected dict. '
         )
         return self.connection.insert_one(doc).inserted_id
-    
-    

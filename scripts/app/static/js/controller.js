@@ -64,7 +64,6 @@ aioApp.controller('SignupController', function($scope, $http, $location){
                     $location.url('/login')
                 }
             },
-
             function(errres){
                 if(errres.status == 401){
                     $scope.error_message = "Invalid username and password";
@@ -72,10 +71,13 @@ aioApp.controller('SignupController', function($scope, $http, $location){
                 else if (errres.status == 500){
                     $scope.error_message = 'Server error! Try later.';
                 }else{
+                    console.log("This si err", errres)
                 }
             }
         )
-        
+        .catch(function(err){
+            console.log(err, "eo")
+        });
     }
 });
 

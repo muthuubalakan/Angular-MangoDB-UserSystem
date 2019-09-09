@@ -6,6 +6,8 @@ from settings import PATH
 
 
 INDEX_HTML = os.path.join(PATH, "app","index.html")
+COOKIE_NAME = 'coin'
+COOKIE_VALUE = 0
 
 
 class AppView(Handler):
